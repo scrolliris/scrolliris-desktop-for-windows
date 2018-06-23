@@ -7,7 +7,9 @@ Code Name: ``Wetzikon``
 Build
 -----
 
-TODO
+.. code:: powershell
+
+   > PowerShell.exe -ExecutionPolicy Bypass -File .\BuildAndRun.ps1 "x64"
 
 
 Test
