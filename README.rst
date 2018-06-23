@@ -4,6 +4,26 @@ Scrolliris Desktop for Windows
 Code Name: ``Wetzikon``
 
 
+Dependencies
+------------
+
+Building
+~~~~~~~~
+
+* .NET Framework v4.7.2
+* Windows 10 SDK
+  * Windows 10 App Development (UWP)
+* Visual Studio Build Tools 2017
+  * NuGet
+  * MSBuild
+
+Testing
+~~~~~~~
+
+* MStest
+* TestRunner
+
+
 Build
 -----
 
@@ -12,10 +32,17 @@ Build
    > PowerShell.exe -ExecutionPolicy Bypass -File .\BuildAndRun.ps1 "x64"
 
 
+
 Test
 ----
 
-TODO
+.. code:: powershell
+
+   # `packages.config` is used only for the setup of `TestRunner`.
+   > .\NuGet.exe install "Wetzikon.Tests/packages.config"
+
+   > PowerShell.exe -ExecutionPolicy Bypass -File .\RunTest.ps1 "x64"
+
 
 
 License
