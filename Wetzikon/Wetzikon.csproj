@@ -111,7 +111,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Wetzikon.pfx" />
     <None Include="Wetzikon_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
