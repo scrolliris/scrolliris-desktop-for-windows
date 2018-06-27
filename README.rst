@@ -3,6 +3,10 @@ Scrolliris Desktop for Windows
 
 Code Name: ``Wetzikon``
 
+.. raw:: html
+
+   <img src="/img/scrolliris-desktop-windows-20180628.png?raw=true" alt="Scrolliris Desktop Windows v0.0.1" width="510px">
+
 
 Dependencies
 ------------
