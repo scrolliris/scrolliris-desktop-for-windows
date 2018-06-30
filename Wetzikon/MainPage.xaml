@@ -105,8 +105,9 @@
       x:Name="NavView"
       AlwaysShowHeader="False"
       IsBackButtonVisible="Collapsed" IsBackEnabled="False"
-      IsPaneToggleButtonVisible="False" IsPaneOpen="False"
+      IsPaneToggleButtonVisible="False" IsPaneOpen="True"
       CompactModeThresholdWidth="1920" ExpandedModeThresholdWidth="1920"
+      OpenPaneLength="270"
       ItemInvoked="NavView_ItemInvoked"
       Loaded="NavView_Loaded"
       Canvas.ZIndex="0">
@@ -123,7 +124,7 @@
         <NavigationViewItemHeader Content="Carrell" />
         <NavigationViewItem
           x:Uid="AppsNavItem" Icon="List"
-          Content="Index" Tag="index" />
+          Content="Desktop" Tag="desktop" />
         <NavigationViewItem
           x:Uid="AppsNavItem" Icon="FontSize"
           Content="Preferences" Tag="preferences" />
@@ -147,7 +148,7 @@
       <Frame x:Name="ContentFrame">
         <Frame.ContentTransitions>
           <TransitionCollection>
-            <NavigationThemeTransition />
+            <ContentThemeTransition />
           </TransitionCollection>
         </Frame.ContentTransitions>
       </Frame>
