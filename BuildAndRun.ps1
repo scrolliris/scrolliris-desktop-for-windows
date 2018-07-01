@@ -35,8 +35,8 @@ wsl rm -f `
   "${projectname}/{bin,obj}/${platform}/${configuration}/${displayname}.exe"
 wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
 
+MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Restore
 MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
-
 
 # Build
 $binDir = ".\${projectname}\bin\${platform}\${configuration}"
