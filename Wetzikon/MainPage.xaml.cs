@@ -20,6 +20,10 @@ namespace Wetzikon {
         ("publications", typeof(Publications)),
     };
 
+    private bool IsPaneOpen {
+        get { return !(bool)MenuButton.IsChecked; }
+    }
+
     public MainPage() {
       this.InitializeComponent();
 
@@ -33,6 +37,7 @@ namespace Wetzikon {
       Window.Current.SetTitleBar(AppTitleBar);
     }
 
+    #region Event Handlers
     private void NavView_Loaded(object sender, RoutedEventArgs e) {
       ContentFrame.Navigated += On_Navigated;
 
@@ -40,12 +45,33 @@ namespace Wetzikon {
         typeof(Registry), null, new SuppressNavigationTransitionInfo());
     }
 
+    private void NavView_PaneClosing(
+      object sender, NavigationViewPaneClosingEventArgs e) {
+      // cancel close
+      if (IsPaneOpen) {
+        KeepPaneOpen();
+        e.Cancel = true;
+      }
+    }
+
+    private void NavView_DisplayModeChanged(
+      object sender, NavigationViewDisplayModeChangedEventArgs e) {
+      if (IsPaneOpen) {
+        KeepPaneOpen();
+      }
+    }
+
+    private void NavView_SelectionChanged(
+      object sender, NavigationViewSelectionChangedEventArgs e) {
+      // pass
+    }
+
     private void NavView_ItemInvoked(
       NavigationView sender, NavigationViewItemInvokedEventArgs e) {
 
       if (e.IsSettingsInvoked) {
         ContentFrame.Navigate(
-            typeof(Settings), null, new DrillInNavigationTransitionInfo());
+          typeof(Settings), null, new DrillInNavigationTransitionInfo());
         return;
       }
 
@@ -62,6 +88,7 @@ namespace Wetzikon {
 
     private void NavView_BackRequested(
       NavigationView sender, NavigationViewBackRequestedEventArgs e) {
+      // pass
     }
 
     private void MenuButton_Checked(object sender, RoutedEventArgs e) {
@@ -74,7 +101,9 @@ namespace Wetzikon {
       On_BackRequested();
       e.Handled = true;
     }
+    #endregion
 
+    #region Additional Event Handlers
     private bool On_BackRequested() {
       // Do Nothing
       return true;
@@ -90,6 +119,12 @@ namespace Wetzikon {
           .OfType<NavigationViewItem>()
           .First(i => i.Tag.Equals(item.Tag));
       }
+    }
+    #endregion
+
+    private void KeepPaneOpen() {
+      NavView.SetValue(NavigationView.DisplayModeProperty,
+        NavigationViewDisplayMode.Expanded);
     }
 
     private void UpdateAppTitleBar(

@@ -8,6 +8,6 @@
   mc:Ignorable="d"
   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
   <Grid>
-    <TextBlock Text="Preferences" />
+    <TextBlock Text="Preferences" HorizontalAlignment="Right" />
   </Grid>
 </Page>

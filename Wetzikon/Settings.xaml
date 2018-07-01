@@ -9,6 +9,6 @@
   NavigationCacheMode="Enabled">
 
   <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <TextBlock Text="Settings" />
+    <TextBlock Text="Settings" HorizontalAlignment="Right" />
   </Grid>
 </local:InnerFrame>

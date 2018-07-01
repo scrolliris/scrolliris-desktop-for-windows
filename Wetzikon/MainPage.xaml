@@ -103,10 +103,13 @@
 
     <NavigationView
       x:Name="NavView"
-      AlwaysShowHeader="False"
+      AlwaysShowHeader="False" IsTabStop="False"
       IsBackButtonVisible="Collapsed" IsBackEnabled="False"
       IsPaneToggleButtonVisible="False" IsPaneOpen="True"
+      PaneClosing="NavView_PaneClosing"
+      DisplayModeChanged="NavView_DisplayModeChanged"
       CompactModeThresholdWidth="1920" ExpandedModeThresholdWidth="1920"
+      SelectionChanged="NavView_SelectionChanged"
       OpenPaneLength="270"
       ItemInvoked="NavView_ItemInvoked"
       Loaded="NavView_Loaded"
