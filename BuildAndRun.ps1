@@ -33,9 +33,9 @@ taskkill /im "${displayname}.exe" /f
 # Clean (resources and cache etc.)
 wsl rm -f `
   "${projectname}/{bin,obj}/${platform}/${configuration}/${displayname}.exe"
-#wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
+wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
 
-#MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
+MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
 
 
 # Build
