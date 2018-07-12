@@ -37,7 +37,8 @@ Build
 
 .. code:: powershell
 
-   > PowerShell.exe -ExecutionPolicy Bypass -File .\BuildAndRun.ps1 "x64"
+   > PowerShell.exe -ExecutionPolicy Bypass -File .\Build.ps1 `
+       -Configuration Debug -Platform x64 -Run
 
 
 

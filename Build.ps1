@@ -1,31 +1,39 @@
 #!/usr/bin/env powershell -File
 
-param([string]$platform)
+param(
+  [string] $platform,
+  [string] $configuration,
+  [switch] $run
+)
 
 $projectname = "Wetzikon"
 $displayname = "Scrolliris Desktop for Windows"
 $packagename = "Scrolliris.Desktop.Windows"
-$configuration = "Debug"
 $log = "Trace"
 $version = "0.0.1.0"
+
+# NOTE
+#
+# ```powershell
+# > powershell.exe -ExecutionPolicy Bypass -File .\Build.ps1 `
+#   -Platform "x64" -Configuration "Debug" -Run
+# ```
+
+if ($platform -ne "x86" -and $platform -ne "x64" -and $platform -ne "ARM") {
+  Write-Host "Unknown platform: ${platform}"
+  exit 1
+}
+
+if ($configuration -ne "Debug" -and $configuration -ne "Release") {
+  Write-Host "Unknown configuration: ${configuration}"
+  exit 1
+}
 
 Write-Host ""
 Write-Host "Configuration: $configuration"
 Write-Host "Platform: $platform"
 Write-Host "Log: $log"
-Write-Host ""
-
-# NOTE
-#
-# ```powershell
-# > powershell.exe -ExecutionPolicy Bypass -File .\BuildAndRun.ps1 "x86"
-# > powershell.exe -ExecutionPolicy Bypass -File .\BuildAndRun.ps1 "x64"
-# > powershell.exe -ExecutionPolicy Bypass -File .\BuildAndRun.ps1 "ARM"
-# ```
-
-if ($platform -ne "x86" -and $platform -ne "x64" -and $platform -ne "ARM") {
-  exit 1
-}
+Write-Host "Run: $run"
 
 taskkill /im 'MSBuild.exe' /f
 taskkill /im "${displayname}.exe" /f
@@ -43,7 +51,7 @@ wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
 
 MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
 
-rm "${packageDir}" -r -fo
+# rm "${packageDir}" -r -fo
 
 
 # Restore
@@ -68,7 +76,7 @@ if ($lastexitcode -ne 0) {
 
 # Register
 Write-Host ""
-Get-AppXPackage | findstr /i "${packagename}$"
+Get-AppXPackage | findstr /i "${packagename}$" | Out-Null
 
 if ($lastexitcode -eq 0) {
   Get-AppXPackage -Name "${packagename}" | Remove-AppxPackage
@@ -79,7 +87,7 @@ PowerShell.exe -ExecutionPolicy ByPass -Command `
   "& ${packageDir}\${scriptPath} -Force"
 
 Write-Host ""
-Get-AppXPackage | findstr /i "${packagename}$"
+Get-AppXPackage | findstr /i "${packagename}$" | Out-Null
 if ($lastexitcode -ne 0) {
   Write-Host
   Write-Host "Registration faild with status: ${lastexitcode}"
@@ -87,8 +95,9 @@ if ($lastexitcode -ne 0) {
 }
 
 # Run
-Write-Host ""
-Write-Host "Application '${displayname}' is starting..."
+if ($run) {
+  Write-Host "Application '${displayname}' is starting..."
 
-explorer.exe shell:AppsFolder\$(Get-AppXPackage -name "$packagename" | `
-  select -expandproperty PackageFamilyName)!App
+  explorer.exe shell:AppsFolder\$(Get-AppXPackage -name "$packagename" | `
+    select -expandproperty PackageFamilyName)!App
+}
