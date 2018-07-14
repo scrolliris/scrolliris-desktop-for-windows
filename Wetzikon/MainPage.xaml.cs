@@ -63,7 +63,7 @@ namespace Wetzikon {
 
     private void NavView_SelectionChanged(
       object sender, NavigationViewSelectionChangedEventArgs e) {
-      // pass
+      Log.Debug(sender.GetType().Name);
     }
 
     private void NavView_ItemInvoked(

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -8,6 +9,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -28,6 +30,42 @@ namespace Wetzikon {
     public App() {
       this.InitializeComponent();
       this.Suspending += OnSuspending;
+
+#if DEBUG
+      SetupLogger();
+#endif
+    }
+
+    private void SetupLogger(bool internalLoggingEnabled = false) {
+      if (internalLoggingEnabled) {
+        // C:\Users\<username>\AppData\Local\Packages\<app>\TempState
+        StorageFolder tempDir = ApplicationData.Current.TemporaryFolder;
+        NLog.Common.InternalLogger.LogToConsole = true;
+        NLog.Common.InternalLogger.LogFile = Path.Combine(
+          tempDir.Path, "internal.log");
+        NLog.Common.InternalLogger.LogLevel = NLog.LogLevel.Trace;
+      }
+      // NLog
+      // C:\Users\<username>\AppData\Local\Packages\<app>\LocalCache
+      StorageFolder cacheDir = ApplicationData.Current.LocalCacheFolder;
+      var config = new NLog.Config.LoggingConfiguration();
+      var target = new NLog.Targets.FileTarget("file") {
+        FileName = Path.Combine(cacheDir.Path, "debug.log"),
+        Header = "",
+        Layout = "" + 
+          "${date:universalTime=False:format=dd-MM-yyyy HH\\:mm\\:ss.fff} " +
+          "${pad:padding=5:alignmentOnTruncation=left:inner=" +
+            "${level:uppercase=True}" +
+           "} " +
+          "${message}${exception:format=ToString}",
+        LineEnding = NLog.Targets.LineEndingMode.LF
+      };
+      config.AddTarget(target);
+      config.AddRuleForAllLevels(target);
+      NLog.LogManager.Configuration = config;
+
+      var logger = NLog.LogManager.GetCurrentClassLogger();
+      logger.Info("");
     }
 
     /// Invoked when the application is launched normally by the end user.
@@ -84,6 +122,51 @@ namespace Wetzikon {
       var deferral = e.SuspendingOperation.GetDeferral();
       //TODO: Save application state and stop any background activity
       deferral.Complete();
+    }
+  }
+
+  public static class Log {
+    // TODO: Info, Warn, Error, Fatal
+    public static void Trace(string text) {
+#if DEBUG
+      var logger = NLog.LogManager.GetLogger("App");
+      var trace = new System.Diagnostics.StackTrace();
+      logger.Trace(FormatMessage(trace, text, new object[]{}));
+#endif
+    }
+
+    public static void Trace(string text, params object[] args) {
+#if DEBUG
+      var logger = NLog.LogManager.GetLogger("App");
+      var trace = new System.Diagnostics.StackTrace();
+      logger.Trace(FormatMessage(trace, text, args));
+#endif
+    }
+
+    public static void Debug(string text) {
+#if DEBUG
+      var logger = NLog.LogManager.GetLogger("App");
+      var trace = new System.Diagnostics.StackTrace();
+      logger.Debug(FormatMessage(trace, text, new object[]{}));
+#endif
+    }
+
+    public static void Debug(string text, params object[] args) {
+#if DEBUG
+      var logger = NLog.LogManager.GetLogger("App");
+      var trace = new System.Diagnostics.StackTrace();
+      logger.Debug(FormatMessage(trace, text, args));
+#endif
+    }
+
+    private static string FormatMessage(
+      System.Diagnostics.StackTrace trace, string text, params object[] args) {
+      System.Diagnostics.StackFrame frame = trace.GetFrame(1);
+      string className = frame.GetMethod().ReflectedType.FullName;
+      string methodName = frame.GetMethod().Name;
+      string message = String.Format(
+        "{0}/{1}: {2}", className, methodName, text);
+      return String.Format(message, args);
     }
   }
 }

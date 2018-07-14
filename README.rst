@@ -40,6 +40,46 @@ Build
    > PowerShell.exe -ExecutionPolicy Bypass -File .\Build.ps1 `
        -Configuration Debug -Platform x64 -Run
 
+Logging
+~~~~~~~
+
+In **DEBUG**, a log file named ``debug.log`` will be created.
+
+.. code:: bash
+
+   # on WSL
+   $ grc -c conf.debug tail -f /mnt/c/Users/<USER>/AppData/Local/Packages/ \
+     <PACKAGE>/LocalCache/debug.log
+
+
+If you want, check following ``conf.debug`` for grc.
+
+.. code:: text
+
+   regexp=^.*\s(TRACE)\s.*$
+   colours=unchanged,"\033[38;5;117m"
+   count=once
+   -
+   regexp=^.*\s(DEBUG)\s.*$
+   colours=unchanged,"\033[38;5;183m"
+   count=once
+   -
+   regexp=^.*\s(INFO)\s.*$
+   colours=unchanged,"\033[38;5;228m"
+   count=once
+   -
+   regexp=^.*\s(WARN)\s.*$
+   colours=unchanged,"\033[38;5;203m"
+   count=once
+   -
+   regexp=^.*\s(ERROR)\s.*$
+   colours=unchanged,"\033[38;5;199m"
+   count=once
+   -
+   regexp=^.*\s(FATAL)\s.*$
+   colours=unchanged,"\033[38;5;1m"
+   count=once
+
 
 
 Test
