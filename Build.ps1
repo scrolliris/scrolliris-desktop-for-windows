@@ -3,6 +3,7 @@
 param(
   [string] $platform,
   [string] $configuration,
+  [switch] $clean,
   [switch] $run
 )
 
@@ -33,29 +34,29 @@ Write-Host ""
 Write-Host "Configuration: $configuration"
 Write-Host "Platform: $platform"
 Write-Host "Log: $log"
+Write-Host "Clean: $clean"
 Write-Host "Run: $run"
 
 taskkill /im 'MSBuild.exe' /f
 taskkill /im "${displayname}.exe" /f
 
 $currentDir = (Get-Item ".\").FullName
-$packageDir = "${currentDir}\${projectname}\AppPackages"
-$scriptPath = "${projectname}_${version}_${configuration}_Test" + `
-  "\Add-AppDevPackage.ps1"
+$packageDir = "${currentDir}\${projectname}" + `
+  "\AppPackages\${projectname}_${version}_${configuration}_Test"
+$scriptPath = "${packageDir}\Add-AppDevPackage.ps1"
 
 
 # Clean (resources and cache etc.)
-wsl rm -f `
-  "${projectname}/{bin,obj}/${platform}/${configuration}/${displayname}.exe"
-wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
+if ($clean) {
+  wsl rm -f `
+    "${projectname}/{bin,obj}/${platform}/${configuration}/${displayname}.exe"
+  wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
+  wsl rm -fr "${packageDir}/*"
+  Remove-Item "${packageDir}" -Recurse -Force
+  MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
 
-MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
-
-# rm "${packageDir}" -r -fo
-
-
-# Restore
-MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Restore
+  MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Restore
+}
 
 
 # Build
@@ -84,7 +85,7 @@ if ($lastexitcode -eq 0) {
 
 # https://docs.microsoft.com/en-us/previous-versions/windows/apps/hh454036(v=vs.140)#sideload-your-app-package
 PowerShell.exe -ExecutionPolicy ByPass -Command `
-  "& ${packageDir}\${scriptPath} -Force"
+  "& ${scriptPath} -Force"
 
 Write-Host ""
 Get-AppXPackage | findstr /i "${packagename}$" | Out-Null
