@@ -38,7 +38,7 @@ Build
 .. code:: powershell
 
    > PowerShell.exe -ExecutionPolicy Bypass -File .\Build.ps1 `
-       -Configuration Debug -Platform x64 -Run
+       -Configuration Debug -Platform x64 -Run -Clean
 
 Logging
 ~~~~~~~
@@ -50,6 +50,8 @@ In **DEBUG**, a log file named ``debug.log`` will be created.
    # on WSL
    $ grc -c conf.debug tail -f /mnt/c/Users/<USER>/AppData/Local/Packages/ \
      <PACKAGE>/LocalCache/debug.log
+
+   $ ./taillog
 
 
 If you want, check following ``conf.debug`` for grc.

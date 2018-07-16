@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# windows user
+user_name=$(/mnt/c/Windows/System32/cmd.exe /c 'echo %USERNAME%' | \
+  sed -e 's/\r//g')
+
+packages_dir="/mnt/c/Users/${user_name}/AppData/Local/Packages"
+
+app_name="Scrolliris.Desktop.Windows"
+pack_dir=$(find ${packages_dir} -maxdepth 1 -type d 2>&1 | grep "${app_name}_")
+
+file_name="debug.log"
+
+cache_dir="${pack_dir}/LocalCache"
+tmp_state="${pack_dir}/TempState"
+
+# command
+tail_cmd="tail -f"
+grc_conf="conf.debug"
+log_file="${cache_dir}/${file_name}"
+
+if ! type "grc" > /dev/null; then
+  tail_cmd="grc -c ${grc_conf}"
+fi
+
+# with `--internal` enables to read (internal) logs for logger
+case "$1" in
+  "--internal")
+    log_file="${tmp_state}/internal.log"
+  ;;
+  *)
+  ;;
+esac
+
+${tail_cmd} ${log_file}
