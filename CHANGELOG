@@ -1,4 +1,5 @@
 Mon 16 Jul 2018 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
+	* Change test runner to `vstest.console.exe`
 	* Create taillog script for debugging
 	* Add -Clean option for Build.ps1
 
