@@ -24,13 +24,13 @@ Building
 
   * NuGet.exe
   * MSBuild.exe
-  
+
     * MakeAppx.exe
 
 Testing
 ~~~~~~~
 
-* VSTest
+* VSTest (For run, it needs Visual Studio 2017 Installation)
 
 
 Build
