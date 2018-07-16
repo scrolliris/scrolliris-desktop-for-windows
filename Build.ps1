@@ -30,12 +30,13 @@ if ($configuration -ne "Debug" -and $configuration -ne "Release") {
   exit 1
 }
 
-Write-Host ""
+Write-Host
 Write-Host "Configuration: $configuration"
 Write-Host "Platform: $platform"
 Write-Host "Log: $log"
 Write-Host "Clean: $clean"
 Write-Host "Run: $run"
+Write-Host
 
 taskkill /im 'MSBuild.exe' /f
 taskkill /im "${displayname}.exe" /f
@@ -52,9 +53,10 @@ if ($clean) {
     "${projectname}/{bin,obj}/${platform}/${configuration}/${displayname}.exe"
   wsl rm -fr "${projectname}/{bin,obj}/${platform}/${configuration}/*"
   wsl rm -fr "${packageDir}/*"
-  Remove-Item "${packageDir}" -Recurse -Force
-  MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
 
+  Remove-Item "${packageDir}" -Recurse -Force
+
+  MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Clean
   MSBuild.exe .\"${projectname}"\"${projectname}".csproj /t:Restore
 }
 
