@@ -22,14 +22,15 @@ Building
 
 * Visual Studio Build Tools 2017
 
-  * NuGet
-  * MSBuild
+  * NuGet.exe
+  * MSBuild.exe
+  
+    * MakeAppx.exe
 
 Testing
 ~~~~~~~
 
-* MStest
-* TestRunner
+* VSTest
 
 
 Build
@@ -37,6 +38,7 @@ Build
 
 .. code:: powershell
 
+   > NuGet.exe restore "Wetzikon/Wetzikon.csproj"
    > PowerShell.exe -ExecutionPolicy Bypass -File .\Build.ps1 `
        -Configuration Debug -Platform x64 -Run -Clean
 
@@ -89,10 +91,9 @@ Test
 
 .. code:: powershell
 
-   # `packages.config` is used only for the setup of `TestRunner`.
-   > .\NuGet.exe install "Wetzikon.Tests/packages.config"
-
-   > PowerShell.exe -ExecutionPolicy Bypass -File .\RunTest.ps1 "x64"
+   > NuGet.exe restore "Wetzikon.Tests/Wetzikon.Tests.csproj"
+   > PowerShell.exe -ExecutionPolicy Bypass -File .\RunTest.ps1 `
+       -Platform x64 -Clean
 
 
 
