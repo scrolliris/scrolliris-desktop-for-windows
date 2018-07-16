@@ -1,3 +1,7 @@
+Mon 16 Jul 2018 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
+	* Create taillog script for debugging
+	* Add -Clean option for Build.ps1
+
 Thu 12 Jul 2018 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
 	* Update Build.ps1 to take parameters and a switch
 	* Rename BuildAndRun.ps1 as Build.ps1
